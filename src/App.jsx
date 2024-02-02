@@ -49,17 +49,6 @@ function App() {
     };
   }, [dispatch]);
 
-//   console.log("BusBar1 : ", busbar1);
-//   console.log("BusBar2 : ", busbar2);
-//   console.log("BusBar3 : ", busbar3);
-//   console.log("BusBar4 : ", busbar4);
-//   console.log("BusBar5 : ", busbar5);
-//   console.log("BusBar6 : ", busbar6);
-//   console.log("BusBar7 : ", busbar7);
-//   console.log("BusBar8 : ", busbar8);
-//   console.log("BusBar9 : ", busbar9);
-//   console.log("BusBar10 : ", busbar10);
-
   return (
     <BrowserRouter>
       <Routes>

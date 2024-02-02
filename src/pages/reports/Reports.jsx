@@ -6,11 +6,12 @@ import ReportTimePopup from "./ReportTimePopup";
 
 
 function formatDate(timestamp) {
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const date = new Date(timestamp);
   const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const month = months[date.getMonth()];
   const day = date.getDate().toString().padStart(2, '0');
-  return `${year}-${month}-${day}`;
+  return `${day}-${month}-${year}`;
 }
 
 function formatTime(timestamp) {
@@ -27,7 +28,9 @@ const Reports = () => {
   const [StartTime, setStartTime] = useState(null);
   const [EndTime, setEndTime] = useState(null);
   const [Full, setFull] = useState(["null"]);
-  const [selectBusbar, setSelectBusbar] = useState("sensorModel1");
+  const [selectBusbar, setSelectBusbar] = useState("sensorModel6");
+
+  // const [isBusBarClicked, setIsBusBarClicked] = useState(false);
 
   const [infoReport, setInfoReport] = useState([]);
   const [errorReport, setErrorReport] = useState();
@@ -36,9 +39,8 @@ const Reports = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const url = "http://localhost:4000/sensor/getAllcollection";
+      const url = "https://vedanta.xyma.live/sensor/getAllcollection";
       try {
-        console.log(url);
         const response = await fetch(url);
         const infoVal = await response.json();
         setFull(infoVal);
@@ -55,50 +57,78 @@ const Reports = () => {
   }, []);
 
   useEffect(() => {
-    const excludeKeys = ["id", "_id", "createdAt", "updatedAt", "__v"];
-const resultArrays = [];
-Full.forEach(subarray => {
-  if (Array.isArray(subarray)) {
-    const resultArray = [];
-    subarray.forEach(item => {
-      const values = Object.values(item).filter((_, index) => !excludeKeys.includes(Object.keys(item)[index]));
-      resultArray.push(...values);
+    const excludeKeys = ["id", "_id", "TIME", "createdAt", "updatedAt", "__v"];
+    const resultArrays = [];
+    Full.forEach(subarray => {
+      if (Array.isArray(subarray)) {
+        const resultArray = [];
+        subarray.forEach(item => {
+          const values = Object.values(item).filter((_, index) => !excludeKeys.includes(Object.keys(item)[index]));
+          resultArray.push(...values);
+        });
+        resultArrays.push(resultArray);
+        setFullData(resultArrays);
+      } else {
+        // Handle the case where the subarray is not an array (e.g., it's empty or not properly formatted)
+        console.log("Skipping non-array subarray:", subarray);
+      }
     });
-    resultArrays.push(resultArray);
-    setFullData(resultArrays)
-  } else {
-    // Handle the case where the subarray is not an array (e.g., it's empty or not properly formatted)
-    console.log("Skipping non-array subarray:", subarray);
-  }
-});
-  }, [Full])
+  }, [Full]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      var url;
-      if (StartTime != null) {
-        url = `http://localhost:4000/sensor/gettime?start=${StartTime}&end=${EndTime}&busbar=${selectBusbar}`;
-      } else {
-        url = `http://localhost:4000/sensor/getfull${selectBusbar}`;
-      }
-      try {
-        console.log(url);
-        const response = await fetch(url);
-        const infoVal = await response.json();
-        setInfoReport(infoVal);
-      } catch (error) {
-        setErrorReport(error);
-      }
-    };
-    const interval = setInterval(() => {
-      fetchData();
-    }, 1000);
-    return () => {
-      clearInterval(interval);
-    };
+    fetchDataBusbar6();
+    // const interval = setInterval(() => {
+    //   fetchData();
+    // }, 1000);
+    // return () => {
+    //   clearInterval(interval);
+    // }
   }, [StartTime, EndTime, selectBusbar]);
 
-  console.log("FullData", FullData);
+  // const fetchDataBusbar6 = async () => {
+  //   try {
+  //     var url;
+  //   if (StartTime != null) {
+  //     url = `https://vedanta.xyma.live/sensor/gettime?start=${StartTime}&end=${EndTime}&busbar=sensorModel6`;
+  //   } else {
+  //     url = `https://vedanta.xyma.live/sensor/getfullBackupsensorModel6`;
+  //   }
+  //     console.log(url);
+  //     const response = await fetch(url);
+  //     const infoVal = await response.json();
+  //     setInfoReport(infoVal);
+  //     // setIsBusBarClicked(false);
+  //   } catch (error) {
+  //     setErrorReport(error);
+  //   }
+  // };
+
+  // const fetchDataBusbar6 = async () => {
+  //   try {
+  //     var url;
+  //   if (StartTime != null) {
+  //     url = `https://vedanta.xyma.live/sensor/gettime?start=${StartTime}&end=${EndTime}&busbar=sensorModel10`;
+  //   } else {
+  //     url = `https://vedanta.xyma.live/sensor/getfullBackupsensorModel6`;
+  //   }
+  //     console.log(url);
+  //     const response = await fetch(url);
+  //     const infoVal = await response.json();
+  //     setInfoReport(infoVal);
+  //     // setIsBusBarClicked(false);
+  //   } catch (error) {
+  //     setErrorReport(error);
+  //   }
+  // };
+
+  const handleClick = (busbarNumber) => {
+    const busbarString = `sensorModel${busbarNumber}`;
+    setSelectBusbar(busbarString);
+    fetchDataBusbar6(); // Trigger the API call immediately after setting the busbar.
+    setTimeout(() => {
+          handleDownload();
+      }, 5000);
+  };
 
   if (errorReport) {
     return <div>Error: {errorReport.message}</div>;
@@ -169,56 +199,42 @@ Full.forEach(subarray => {
     setFull(full);
   };
 
-  const handleClick = (data) => {
+  const handleSwitchClick = (data) => {
     switch (data) {
       case 1:
-        setSelectBusbar("sensorModel1");
+        handleClick(1);
         break;
       case 2:
-        setSelectBusbar("sensorModel2");
+        handleClick(2);
         break;
       case 3:
-        setSelectBusbar("sensorModel3");
+        handleClick(3);
         break;
       case 4:
-        setSelectBusbar("sensorModel4");
+        handleClick(4);
         break;
       case 5:
-        setSelectBusbar("sensorModel5");
+        handleClick(5);
         break;
       case 6:
-        setSelectBusbar("sensorModel6");
+        handleClick(6);
         break;
       case 7:
-        setSelectBusbar("sensorModel7");
+        handleClick(7);
         break;
       case 8:
-        setSelectBusbar("sensorModel8");
+        handleClick(8);
         break;
       case 9:
-        setSelectBusbar("sensorModel9");
+        handleClick(9);
         break;
       case 10:
-        setSelectBusbar("sensorModel10");
+        handleClick(10);
         break;
       default:
-        setSelectBusbar("sensorModel1");
+        handleClick(6);
     }
   };
-
-  const dateandTime = [];
-  for (let index = 0; index < FullData.length; index++) {
-    var innerArray = FullData[index];
-  if (innerArray && innerArray.length > 14) {
-    dateandTime[index] = innerArray[14];
-  }
-  }
-  const formatted = dateandTime.map(timestamp => ({
-    formattedDate: formatDate(timestamp),
-    formattedTime: formatTime(timestamp),
-  }));
-
-  console.log("formatted",formatted);
 
   const generateExcel = () => {
     const chunkedDataArrays = FullData.map((FullData) => {
@@ -226,7 +242,7 @@ Full.forEach(subarray => {
       for (let i = 0; i < 4; i++) {
         chunkedData.push(FullData.slice(i * 27, (i + 1) * 27));
       }
-      console.log("chukedData",chunkedData);
+      // console.log("chukedData", chunkedData);
       return chunkedData;
     });
 
@@ -244,8 +260,10 @@ Full.forEach(subarray => {
       worksheetData.push(["", "", "A Side", ...chunkedData[1]]);
       worksheetData.push(["", "", "", ...chunkedData[2]]);
       worksheetData.push([
-        `${formatted[j].formattedDate}`,
-        `${formatted[j].formattedTime}`,
+        '2023-11-30',
+        '3:34 PM',
+        // `${formatted[j].formattedDate}`,
+        // `${formatted[j].formattedTime}`,
         "B Side",
         ...chunkedData[3],
       ]);
@@ -254,17 +272,19 @@ Full.forEach(subarray => {
 
     // Create a worksheet
     const ws = XLSX.utils.aoa_to_sheet(worksheetData);
-    console.log("ws",ws);
+    // console.log("ws", ws);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
     XLSX.writeFile(wb, "vedanta.xlsx");
   };
 
   return (
-    <div className="report">
+    <>
+    {infoReport.length !== 0 ? (
+      <div className="report">
       <div className="container">
-        <div className="head">
-          <h1 onClick={generateExcel}>Excel</h1>
+        <div className="head"  onClick={generateExcel}>
+          <h1>Excel</h1>
         </div>
         <div className="aside">
           <div className="name_a">
@@ -274,8 +294,11 @@ Full.forEach(subarray => {
             className="btn"
             onClick={() => {
               setReportIsOpentime(true);
-              handleClick(1);
-              handleDownload();
+              handleSwitchClick(1);
+              // handleDownload();
+              setTimeout(() => {
+                handleDownload();
+            }, 3000);
             }}
           >
             BusBar 1
@@ -284,8 +307,11 @@ Full.forEach(subarray => {
             className="btn"
             onClick={() => {
               setReportIsOpentime(true);
-              handleClick(2);
-              handleDownload();
+              handleSwitchClick(2);
+              // handleDownload();
+              setTimeout(() => {
+                handleDownload();
+            }, 3000);
             }}
           >
             BusBar 2
@@ -294,8 +320,11 @@ Full.forEach(subarray => {
             className="btn"
             onClick={() => {
               setReportIsOpentime(true);
-              handleClick(3);
-              handleDownload();
+              handleSwitchClick(3);
+              // handleDownload();
+              setTimeout(() => {
+                handleDownload();
+            }, 3000);
             }}
           >
             BusBar 3
@@ -304,8 +333,11 @@ Full.forEach(subarray => {
             className="btn"
             onClick={() => {
               setReportIsOpentime(true);
-              handleClick(4);
-              handleDownload();
+              handleSwitchClick(4);
+              // handleDownload();
+              setTimeout(() => {
+                handleDownload();
+            }, 3000);
             }}
           >
             BusBar 4
@@ -314,8 +346,11 @@ Full.forEach(subarray => {
             className="btn"
             onClick={() => {
               setReportIsOpentime(true);
-              handleClick(5);
-              handleDownload();
+              handleSwitchClick(5);
+              // handleDownload();
+              setTimeout(() => {
+                handleDownload();
+            }, 3000);
             }}
           >
             BusBar 5
@@ -324,14 +359,18 @@ Full.forEach(subarray => {
             className="btn"
             onClick={() => {
               setReportIsOpentime(true);
-              handleClick(6);
-              handleDownload();
+              handleSwitchClick(6);
+              // setIsBusBarClicked(true);
+              // handleDownload();
+              setTimeout(() => {
+                handleDownload();
+            }, 1000);
             }}
           >
             BusBar 6
           </div>
         </div>
-
+      
         <div className="bside">
           <div className="name_b">
             <span>B Side</span>
@@ -340,8 +379,10 @@ Full.forEach(subarray => {
             className="btn"
             onClick={() => {
               setReportIsOpentime(true);
-              handleClick(7);
-              handleDownload();
+              handleSwitchClick(7);
+            //   setTimeout(() => {
+            //     handleDownload();
+            // }, 3000);
             }}
           >
             BusBar 7
@@ -350,8 +391,11 @@ Full.forEach(subarray => {
             className="btn"
             onClick={() => {
               setReportIsOpentime(true);
-              handleClick(8);
-              handleDownload();
+              handleSwitchClick(8);
+              // handleDownload();
+              setTimeout(() => {
+                handleDownload();
+            }, 3000);
             }}
           >
             BusBar 8
@@ -360,8 +404,11 @@ Full.forEach(subarray => {
             className="btn"
             onClick={() => {
               setReportIsOpentime(true);
-              handleClick(9);
-              handleDownload();
+              handleSwitchClick(9);
+              // handleDownload();
+              setTimeout(() => {
+                handleDownload();
+            }, 3000);
             }}
           >
             BusBar 9
@@ -370,8 +417,11 @@ Full.forEach(subarray => {
             className="btn"
             onClick={() => {
               setReportIsOpentime(true);
-              handleClick(10);
-              handleDownload();
+              // setIsBusBarClicked(true);
+              handleSwitchClick(10);
+            //   setTimeout(() => {
+            //     handleDownload();
+            // }, 5000);
             }}
           >
             BusBar 10
@@ -383,7 +433,19 @@ Full.forEach(subarray => {
         closeReportTime={() => setReportIsOpentime(false)}
         onDataReportReceived={handleReportTime}
       />
-    </div>
+      </div>
+    ) : (
+      <div className="overlay-graph">
+        <div className="load">
+          <div class="loader">
+            <div class="inner one"></div>
+            <div class="inner two"></div>
+            <div class="inner three"></div>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 };
 

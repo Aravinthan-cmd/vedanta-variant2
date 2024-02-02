@@ -11,13 +11,15 @@ const Graph = () => {
 
   const [isOpentime, setIsOpentime] = useState();
 
+  const [isBusBarClicked, setIsBusBarClicked] = useState(false);
+
   const [infoGraph, setInfoGraph] = useState([]);
   const [error, setError] = useState(false);
 
   const [StartTime, setStartTime] = useState(null);
   const [EndTime, setEndTime] = useState(null);
 
-  const [selectBusbar, setSelectBusbar] = useState('sensorModel1');
+  const [selectBusbar, setSelectBusbar] = useState('sensorModel6');
 
   const [sensorName, setSensorName] = useState(1);
 
@@ -25,15 +27,16 @@ const Graph = () => {
     const fetchData = async () => {
       var url;
       if (StartTime != null) {
-        url = `http://localhost:4000/sensor/gettime?start=${StartTime}&end=${EndTime}&busbar=${selectBusbar}`;
+        url = `https://vedanta.xyma.live/sensor/gettime?start=${StartTime}&end=${EndTime}&busbar=${selectBusbar}`;
       }else{
-        url = `http://localhost:4000/sensor/getfull${selectBusbar}`;
+        url = `https://vedanta.xyma.live/sensor/getfull${selectBusbar}`;
       }
       try {
         console.log(url);
         const response = await fetch(url);
         const infoVal = await response.json();
         setInfoGraph(infoVal);
+        setIsBusBarClicked(false);
       } catch (error) {
         setError(error);
       }
@@ -91,26 +94,28 @@ const Graph = () => {
       for (let j = 0; j < infoGraph.length; j++) {
         sensor[j] = infoGraph[j]?.[sensorName[i]];
       }
-      console.log(sensor)
+      var reverseSensor = sensor.reverse();
       result.push({
          label: sensorName[i],
           backgroundColor: borderColors[i % borderColors.length],
           borderColor: borderColors[i % borderColors.length],
           borderWidth: 1,
-          data: sensor,
+          data: reverseSensor,
       })
     }
-    return result;
+    return result.reverse();
     }
+    
   var chartDatasets = datasets();
 
   var time = [];
   for (let index = 0; index < infoGraph.length; index++) {
     time[index] = infoGraph[index]?.TIME;
   }
+  const graphTime = time.reverse()
   //Chart data
   const data = {
-    labels: time,
+    labels: graphTime,
     datasets: chartDatasets,
   };
 
@@ -185,13 +190,13 @@ const Graph = () => {
         setSelectBusbar('sensorModel10');
         break;
       default:
-        setSelectBusbar('sensorModel1');
+        setSelectBusbar('sensorModel6');
     }
   };
 
   return (
     <>
-    {infoGraph.length !== 0 ? (
+    {infoGraph.length !== 0 && !isBusBarClicked ? (
       <div className="container">
       <div className="box-graph">
         <i className={`bx bx-station live-icon ${StartTime === null ?"active-live":"" } `} onClick={()=>{setStartTime(null)}}></i>
@@ -252,6 +257,7 @@ const Graph = () => {
             className="btn"
             onClick={() => {
               setIsOpentime(true);
+              setIsBusBarClicked(true)
               handleClick(6);
             }}
           >
@@ -294,6 +300,7 @@ const Graph = () => {
             className="btn"
             onClick={() => {
               setIsOpentime(true);
+              setIsBusBarClicked(true);
               handleClick(10);
             }}
           >
@@ -309,7 +316,15 @@ const Graph = () => {
       />
     </div>
     ) : (
-      <div className="overlay-table"></div>
+      <div className="overlay-graph">
+        <div className="load">
+          <div class="loader">
+            <div class="inner one"></div>
+            <div class="inner two"></div>
+            <div class="inner three"></div>
+          </div>
+        </div>
+      </div>
     )}
     </>
   );

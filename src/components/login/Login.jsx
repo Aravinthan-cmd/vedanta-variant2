@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import logo from '../../assets/images/xyma_logo.png';
-import vedanta_logo from '../../assets/images/vedanta_balco-removebg.png'
-import '../login/login.scss'
+import vedanta_logo from '../../assets/images/vedanta_balco-removebg.png';
+import '../login/login.scss';
 
 function Login() {
   const [email, setEmail] = useState('')
@@ -10,7 +10,7 @@ function Login() {
   const loginUser = async (event) => {
     event.preventDefault()
 
-    const response = await fetch('http://52.66.175.77/sensor/login', {
+    const response = await fetch('https://vedanta.xyma.live/sensor/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

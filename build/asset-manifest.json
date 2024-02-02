@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/static/css/main.d2680beb.css",
-    "main.js": "/static/js/main.70c9435f.js",
-    "static/media/boxicons.svg": "/static/media/boxicons.f80cc694af79b88fde78.svg",
+    "main.css": "/static/css/main.f5529916.css",
+    "main.js": "/static/js/main.ae885762.js",
+    "static/media/boxicons.svg": "/static/media/boxicons.17f6cb4eef77f07f2caa.svg",
     "static/media/boxicons.eot": "/static/media/boxicons.dfc882ec9689f820c7c9.eot",
     "static/media/boxicons.woff": "/static/media/boxicons.1a7e2e2bf3a855e674d4.woff",
     "static/media/boxicons.ttf": "/static/media/boxicons.22afc8ee5cfc540cddff.ttf",
@@ -11,11 +11,11 @@
     "static/media/xyma_logo.png": "/static/media/xyma_logo.4e2ffa7fd8e87d8d9843.png",
     "static/media/vedanta_balco-removebg.png": "/static/media/vedanta_balco-removebg.8dd6964637da2baeb918.png",
     "index.html": "/index.html",
-    "main.d2680beb.css.map": "/static/css/main.d2680beb.css.map",
-    "main.70c9435f.js.map": "/static/js/main.70c9435f.js.map"
+    "main.f5529916.css.map": "/static/css/main.f5529916.css.map",
+    "main.ae885762.js.map": "/static/js/main.ae885762.js.map"
   },
   "entrypoints": [
-    "static/css/main.d2680beb.css",
-    "static/js/main.70c9435f.js"
+    "static/css/main.f5529916.css",
+    "static/js/main.ae885762.js"
   ]
 }
