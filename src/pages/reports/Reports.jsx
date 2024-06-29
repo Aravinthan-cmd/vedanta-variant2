@@ -32,7 +32,7 @@ const Reports = () => {
 
   const [loading, setLoading] = useState();
 
-  // const [isBusBarClicked, setIsBusBarClicked] = useState(false);
+  // const [isBusBarClicked, setIsBusBarClicked] = useState(false);           
 
   const [infoReport6, setInfoReport6] = useState([]);
   const [infoReport10, setInfoReport10] = useState([]);
@@ -396,12 +396,12 @@ const Reports = () => {
           <div
             className="btn"
             onClick={() => {
-              setReportIsOpentime(true);
+              // setReportIsOpentime(true);
               // handleSwitchClick(1);
-              // handleDownload();
-              setTimeout(() => {
+              fetchDataBusbar6();
+              // setTimeout(() => {
                 // handleDownload();
-            }, 3000);
+            // }, 3000);
             }}
           >
             BusBar 1
@@ -409,12 +409,12 @@ const Reports = () => {
           <div
             className="btn"
             onClick={() => {
-              setReportIsOpentime(true);
+              // setReportIsOpentime(true);
               // handleSwitchClick(2);
-              // handleDownload();
-              setTimeout(() => {
+              fetchDataBusbar6();
+              // setTimeout(() => {
                 // handleDownload();
-            }, 3000);
+            // }, 3000);
             }}
           >
             BusBar 2
@@ -422,12 +422,12 @@ const Reports = () => {
           <div
             className="btn"
             onClick={() => {
-              setReportIsOpentime(true);
+              // setReportIsOpentime(true);
               // handleSwitchClick(3);
-              // handleDownload();
-              setTimeout(() => {
+              fetchDataBusbar6();
+              // setTimeout(() => {
                 // handleDownload();
-            }, 3000);
+            // }, 3000);
             }}
           >
             BusBar 3
@@ -435,12 +435,12 @@ const Reports = () => {
           <div
             className="btn"
             onClick={() => {
-              setReportIsOpentime(true);
+              // setReportIsOpentime(true);
               // handleSwitchClick(4);
-              // handleDownload();
-              setTimeout(() => {
+              fetchDataBusbar6();
+              // setTimeout(() => {
                 // handleDownload();
-            }, 3000);
+            // }, 3000);
             }}
           >
             BusBar 4
@@ -448,12 +448,12 @@ const Reports = () => {
           <div
             className="btn"
             onClick={() => {
-              setReportIsOpentime(true);
+              // setReportIsOpentime(true);
               // handleSwitchClick(5);
-              // handleDownload();
-              setTimeout(() => {
+              fetchDataBusbar6();
+              // setTimeout(() => {
                 // handleDownload();
-            }, 3000);
+            // }, 3000);
             }}
           >
             BusBar 5
@@ -461,11 +461,9 @@ const Reports = () => {
           <div
             className="btn"
             onClick={() => {
-              fetchDataBusbar6();
               // setReportIsOpentime(true);
               // handleSwitchClick(6);
-              // setIsBusBarClicked(true);
-              // handleDownload();
+              fetchDataBusbar6();
             //   setTimeout(() => {
             //     handleDownload();
             // }, 1000);
@@ -484,6 +482,7 @@ const Reports = () => {
             onClick={() => {
               // setReportIsOpentime(true);
               // handleSwitchClick(7);
+              fetchDataBusbar10();
             //   setTimeout(() => {
             //     handleDownload();
             // }, 3000);
@@ -494,12 +493,12 @@ const Reports = () => {
           <div
             className="btn"
             onClick={() => {
-              setReportIsOpentime(true);
+              // setReportIsOpentime(true);
               // handleSwitchClick(8);
-              // handleDownload();
-              setTimeout(() => {
+              fetchDataBusbar10();
+              // setTimeout(() => {
                 // handleDownload();
-            }, 3000);
+            // }, 3000);
             }}
           >
             BusBar 8
@@ -507,12 +506,12 @@ const Reports = () => {
           <div
             className="btn"
             onClick={() => {
-              setReportIsOpentime(true);
+              // setReportIsOpentime(true);
               // handleSwitchClick(9);
-              // handleDownload();
-              setTimeout(() => {
+              fetchDataBusbar10();
+              // setTimeout(() => {
                 // handleDownload();
-            }, 3000);
+            // }, 3000);
             }}
           >
             BusBar 9
