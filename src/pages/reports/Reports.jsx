@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import ReportTimePopup from "./ReportTimePopup";
 
-
 function formatDate(timestamp) {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const date = new Date(timestamp);
